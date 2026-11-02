@@ -1,0 +1,50 @@
+name: Verify AFT data package
+on:
+  push:
+    paths:
+      - 'packages/army-aft-data/**'
+      - 'src/data/army-aft.json'
+      - 'data/raw/army-aft-scales.pdf'
+      - 'tests/fixtures/official.mjs'
+      - 'scripts/backlinks/smoke-installed.mjs'
+      - '.github/workflows/verify-aft-data.yml'
+  pull_request:
+    paths:
+      - 'packages/army-aft-data/**'
+      - 'src/data/army-aft.json'
+      - 'data/raw/army-aft-scales.pdf'
+      - 'tests/fixtures/official.mjs'
+      - 'scripts/backlinks/smoke-installed.mjs'
+      - '.github/workflows/verify-aft-data.yml'
+  workflow_dispatch:
+jobs:
+  package:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build, verify, and pack
+        shell: bash
+        run: |
+          mkdir -p output/backlinks
+          npm --prefix packages/army-aft-data run build
+          npm --prefix packages/army-aft-data test
+          cd packages/army-aft-data
+          npm pack --pack-destination ../../output/backlinks
+      - name: Install and invoke in a clean consumer directory
+        shell: bash
+        run: |
+          npm install --prefix output/backlinks/install-smoke --ignore-scripts --no-audit --no-fund --package-lock=false ./output/backlinks/aftptcalc-army-aft-data-0.1.0.tgz
+          cp scripts/backlinks/smoke-installed.mjs output/backlinks/install-smoke/smoke.mjs
+          node output/backlinks/install-smoke/smoke.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: army-aft-data-${{ matrix.os }}
+          path: output/backlinks/*.tgz

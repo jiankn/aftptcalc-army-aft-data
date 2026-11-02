@@ -1,0 +1,11 @@
+{
+  "sourceTitle": "Army Fitness Test Scoring Scales, approved 15 May 2025",
+  "sourceUrl": "https://www.army.mil/e2/downloads/rv7/aft/AFT_Scoring_Scales_250601.pdf",
+  "effectiveDate": "2025-06-01",
+  "verifiedOn": "2026-10-29",
+  "rawFile": "data/raw/army-aft-scales.pdf",
+  "sha256": "572ee5afe149add73e951c404ee2f120cd98a2746b2888746a6012009a7c366d",
+  "datasetSha256": "31a519751b6f56d0e54306aa05a3864e501644fa9f5a3cc3f945324c6910dc65",
+  "scope": "Five-event AFT scoring thresholds only. No MOS eligibility, pass/fail policy, medical profiles, promotion points, or alternate-event scoring.",
+  "verificationScope": "Source metadata and archived-file hashes are preserved from the site dataset. Export tests establish consistency, not a new independent review of every official table cell."
+}

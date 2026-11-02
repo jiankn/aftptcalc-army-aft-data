@@ -1,0 +1,25 @@
+{
+  "name": "aftptcalc-army-aft-data",
+  "version": "0.1.0",
+  "description": "Source-attributed Army AFT scoring tables in JSON and CSV for training tools and spreadsheets.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": {"node": ">=22.12"},
+  "homepage": "https://aftptcalc.com/",
+  "repository": {"type": "git", "url": "git+https://github.com/jiankn/aftptcalc-army-aft-data.git"},
+  "bugs": {"url": "https://github.com/jiankn/aftptcalc-army-aft-data/issues"},
+  "exports": {
+    ".": {"types": "./index.d.ts", "import": "./index.mjs"},
+    "./data.json": "./data.json",
+    "./thresholds.csv": "./thresholds.csv",
+    "./provenance.json": "./provenance.json"
+  },
+  "files": ["index.mjs", "index.d.ts", "data.json", "thresholds.csv", "provenance.json", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test test.mjs",
+    "prepack": "npm run build && npm test"
+  },
+  "keywords": ["army-fitness-test", "aft", "fitness", "scoring-tables", "csv"]
+}
