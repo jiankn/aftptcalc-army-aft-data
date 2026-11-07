@@ -2,7 +2,7 @@
 
 Source-attributed Army Fitness Test scoring thresholds for spreadsheet authors and developers building training tools. Includes JSON, long-form CSV, TypeScript declarations, and an age-band lookup helper. No runtime dependencies.
 
-Source and downloadable archives are provided through the [data repository](https://github.com/jiankn/aftptcalc-army-aft-data). This package is not published on npm; `private` prevents accidental npm publication.
+Source and downloadable archives are provided through the [data repository](https://github.com/jiankn/aftptcalc-army-aft-data). Install from npm with `npm install aftptcalc-army-aft-data`.
 
 ## Use
 

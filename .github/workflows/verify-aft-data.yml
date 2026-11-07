@@ -41,7 +41,8 @@ jobs:
       - name: Install and invoke in a clean consumer directory
         shell: bash
         run: |
-          npm install --prefix output/backlinks/install-smoke --ignore-scripts --no-audit --no-fund --package-lock=false ./output/backlinks/aftptcalc-army-aft-data-0.1.0.tgz
+          version=$(node -p "require('./packages/army-aft-data/package.json').version")
+          npm install --prefix output/backlinks/install-smoke --ignore-scripts --no-audit --no-fund --package-lock=false "./output/backlinks/aftptcalc-army-aft-data-${version}.tgz"
           cp scripts/backlinks/smoke-installed.mjs output/backlinks/install-smoke/smoke.mjs
           node output/backlinks/install-smoke/smoke.mjs
       - uses: actions/upload-artifact@v4
