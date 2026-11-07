@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Read and verify source-attributed Army Fitness Test threshold data in Python or a spreadsheet.">
+  <title>Army AFT data reference</title>
+  <style>
+    body { max-width: 49rem; margin: 2.5rem auto; padding: 0 1rem; color: #172422; font: 1rem/1.6 system-ui, sans-serif; }
+    h1, h2 { line-height: 1.2; }
+    a { color: #14574a; }
+    pre { background: #edf3f1; padding: 1rem; overflow: auto; }
+    footer { margin: 2rem 0; padding-top: 1rem; border-top: 1px solid #a8b9b5; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Army AFT data reference</h1>
+  <p>This reference is for people importing the five-event Army Fitness Test scoring tables into spreadsheets, scripts, or training applications. For interactive scoring, use <a href="https://aftptcalc.com/">AFTPTCalc</a>.</p>
+  <h2>Choose a download</h2>
+  <ul>
+    <li><a href="https://github.com/jiankn/aftptcalc-army-aft-data/releases/download/v0.1.0/army-aft-data-kit-0.1.0.zip">Spreadsheet and JSON kit</a>. Extract the ZIP and open <code>thresholds.csv</code> or <code>data.json</code>.</li>
+    <li><a href="https://www.npmjs.com/package/aftptcalc-army-aft-data">JavaScript package</a>. Install <code>aftptcalc-army-aft-data@0.1.1</code> from npm. This release contains the same scoring data.</li>
+    <li><a href="https://github.com/jiankn/aftptcalc-army-aft-data">Source, tests, and original-document archive</a>.</li>
+  </ul>
+  <h2>Read one threshold with Python</h2>
+  <p>After extracting the CSV kit, run this code in the same directory. It selects the published 60-point deadlift threshold for one age and scoring scale. It does not compute a pass decision.</p>
+  <pre><code>import csv
+
+age = 24
+with open("thresholds.csv", newline="", encoding="utf-8") as file:
+    rows = list(csv.DictReader(file))
+
+matches = [
+    row for row in rows
+    if row["event"] == "mdl"
+    and row["sex"] == "male"
+    and row["points"] == "60"
+    and int(row["age_min"]) &lt;= age
+    and (not row["age_max"] or age &lt;= int(row["age_max"]))
+]
+if len(matches) != 1:
+    raise ValueError(f"Expected one published threshold, got {len(matches)}")
+row = matches[0]
+print(row["comparison"], row["threshold"], row["unit"])</code></pre>
+  <h2>Keep the source meaning when importing</h2>
+  <ul>
+    <li>Keep <code>event</code>, <code>sex</code>, and both age bounds in the key. A blank upper bound represents the final published age band.</li>
+    <li>Check the <code>unit</code> and <code>comparison</code> before comparing raw performance. A timed threshold is stored as seconds. A lower value may be better.</li>
+    <li>In the source JSON, a null cell means no published threshold is listed for that combination. In the long CSV it is omitted. Do not substitute zero or interpolate across missing entries.</li>
+    <li>Record the <code>sourceTitle</code>, <code>sourceUrl</code>, <code>effectiveDate</code>, and <code>verifiedOn</code> from <code>data.json</code> when copying the dataset.</li>
+  </ul>
+  <h2>Provenance and scope</h2>
+  <p>The tables were sourced from the Army's <a href="https://www.army.mil/e2/downloads/rv7/aft/AFT_Scoring_Scales_250601.pdf">Army Fitness Test Scoring Scales</a> (effective June 1, 2025). The dataset records verification on October 29, 2026. See the <a href="https://aftptcalc.com/methodology/">AFTPTCalc methodology</a> for import and validation details. The dataset excludes alternate events, eligibility decisions, and administrative rules.</p>
+</main>
+<footer>Independent reference for training and software development. AFTPTCalc is not affiliated with or endorsed by the U.S. Army or the Department of Defense.</footer>
+</body>
+</html>
