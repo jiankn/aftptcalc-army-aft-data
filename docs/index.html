@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Install the source-attributed Army AFT scoring data kit and look up published thresholds in JavaScript or a spreadsheet.">
+  <link rel="canonical" href="https://jiankn.github.io/aftptcalc-army-aft-data/">
+  <title>Army AFT scoring data kit</title>
+  <style>
+    body { margin: 3rem auto; max-width: 46rem; padding: 0 1rem; color: #172422; font: 1rem/1.65 system-ui, sans-serif; }
+    h1, h2 { line-height: 1.2; }
+    h2 { margin-top: 2rem; }
+    a { color: #14574a; text-underline-offset: .18em; }
+    pre { background: #edf3f1; padding: 1rem; overflow: auto; }
+    footer { margin-top: 2rem; border-top: 1px solid #a8b9b5; padding-top: 1rem; font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Army AFT scoring data kit</h1>
+    <p>Version 0.1.0 gives spreadsheet authors and developers the published thresholds for five regular Army Fitness Test events. The kit includes CSV, JSON, and a JavaScript lookup helper. For an interactive training estimate, use <a href="https://aftptcalc.com/">AFTPTCalc</a>.</p>
+    <p><a href="https://github.com/jiankn/aftptcalc-army-aft-data/releases/download/v0.1.0/army-aft-data-kit-0.1.0.zip">Download the CSV and JSON kit</a> · <a href="https://github.com/jiankn/aftptcalc-army-aft-data/releases/tag/v0.1.0">Release and checksums</a> · <a href="https://github.com/jiankn/aftptcalc-army-aft-data">Source and tests</a></p>
+    <h2>Find a threshold in a spreadsheet</h2>
+    <ol>
+      <li>Open <code>thresholds.csv</code> and filter <code>event</code> to the event key. Use <code>mdl</code> for the maximum deadlift or <code>run</code> for the two-mile run.</li>
+      <li>Filter <code>sex</code> to the published scale and select the inclusive <code>age_min</code> and <code>age_max</code> band. A blank upper limit marks the final age band.</li>
+      <li>Filter <code>points</code> to the score you want to look up. Read the threshold alongside <code>unit</code> and <code>comparison</code>. A missing row means the source does not list that combination.</li>
+    </ol>
+    <h2>Read the same data in Node.js</h2>
+    <p>Use Node.js 22.12 or later. In a project directory, install the versioned archive:</p>
+    <pre><code>npm install https://github.com/jiankn/aftptcalc-army-aft-data/releases/download/v0.1.0/aftptcalc-army-aft-data-0.1.0.tgz</code></pre>
+    <p>Save this example as <code>lookup.mjs</code> and run <code>node lookup.mjs</code>.</p>
+    <pre><code>import { data, getThresholds } from 'aftptcalc-army-aft-data';
+
+const scale = getThresholds({ event: 'mdl', age: 24, sex: 'male' });
+const row = scale.rows.find(({ points }) =&gt; points === 60);
+console.log(row?.threshold, scale.unit, scale.comparison);
+console.log(data.sourceUrl);</code></pre>
+    <h2>Source and scope</h2>
+    <p>The source is the Army’s <a href="https://www.army.mil/e2/downloads/rv7/aft/AFT_Scoring_Scales_250601.pdf">Army Fitness Test Scoring Scales</a>, effective June 1, 2025. The dataset records verification on October 29, 2026. See the <a href="https://aftptcalc.com/methodology/">AFTPTCalc methodology</a> for the source archive and validation approach.</p>
+    <p>The kit supplies lookup thresholds for the regular five events. Combat-scale eligibility, alternate events, and overall pass decisions require the applicable official guidance.</p>
+  </main>
+  <footer>Independent training and developer resource. AFTPTCalc is not affiliated with or endorsed by the U.S. Army, the Department of Defense, or any government agency.</footer>
+</body>
+</html>
